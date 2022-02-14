@@ -7,14 +7,24 @@
     "build": "cross-env NODE_ENV=production vite build"
   },
   "dependencies": {
+    "firebase": "^9.6.6",
+    "firebaseui": "^6.0.0",
+    "moment": "^2.29.1",
+    "primeicons": "^5.0.0",
+    "primevue": "^3.11.1",
     "vue": "^3.2.29",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "vue-sweetalert2": "^5.0.2",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.1.0",
     "@vue/compiler-sfc": "^3.2.29",
     "autoprefixer": "^10.4.2",
     "cross-env": "^7.0.3",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-vue": "^8.4.1",
     "postcss": "^8.4.6",
     "tailwindcss": "^2.2.19",
     "vite": "^2.7.13"

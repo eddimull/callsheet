@@ -8,8 +8,9 @@
         <router-link
           to="/about"
           class="text-indigo-600 underline hover:text-indigo-500"
-          >About page</router-link
-        >.
+        >
+          About page
+        </router-link>.
       </div>
     </div>
   </main>

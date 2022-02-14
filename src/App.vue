@@ -9,20 +9,19 @@
                 class="w-8 h-8"
                 src="/img/logos/workflow-mark-on-dark.svg"
                 alt="Workflow logo"
-              />
+              >
             </div>
             <div class="hidden md:block">
               <div class="flex items-baseline ml-10">
                 <router-link
                   v-for="(link, i) in links"
                   :key="i"
+                  v-slot="{ navigate, href, isExactActive }"
                   :to="link.to"
                   custom
-                  v-slot="{ navigate, href, isExactActive }"
                 >
                   <a
                     :href="href"
-                    @click="navigate"
                     class="px-3 py-2 text-sm font-medium rounded-md"
                     :class="[
                       isExactActive
@@ -30,8 +29,8 @@
                         : 'text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700',
                       i > 0 && 'ml-4',
                     ]"
-                    >{{ link.text }}</a
-                  >
+                    @click="navigate"
+                  >{{ link.text }}</a>
                 </router-link>
               </div>
             </div>
@@ -61,17 +60,17 @@
               <div class="relative ml-3">
                 <div>
                   <button
-                    class="flex items-center max-w-xs text-sm text-white rounded-full  focus:outline-none focus:shadow-solid"
                     id="user-menu"
+                    class="flex items-center max-w-xs text-sm text-white rounded-full  focus:outline-none focus:shadow-solid"
                     aria-label="User menu"
                     aria-haspopup="true"
                     @click="showProfileMenu = !showProfileMenu"
                   >
                     <img
                       class="w-8 h-8 rounded-full"
-                      src="/img/person1.jpeg"
+                      :src="avatarImg"
                       alt=""
-                    />
+                    >
                   </button>
                 </div>
 
@@ -97,20 +96,19 @@
                         href="#"
                         class="block px-4 py-2 text-sm text-gray-700  hover:bg-gray-100"
                         role="menuitem"
-                        >Your Profile</a
-                      >
+                      >Your Profile</a>
                       <a
                         href="#"
                         class="block px-4 py-2 text-sm text-gray-700  hover:bg-gray-100"
                         role="menuitem"
-                        >Settings</a
-                      >
-                      <a
-                        href="#"
+                      >Settings</a>
+                      <router-link
+                        to="logout"
                         class="block px-4 py-2 text-sm text-gray-700  hover:bg-gray-100"
                         role="menuitem"
-                        >Sign out</a
                       >
+                        Sign out
+                      </router-link>
                     </div>
                   </div>
                 </transition>
@@ -162,18 +160,20 @@
 
       Open: "block", closed: "hidden"
     -->
-      <div class="md:hidden" :class="showMenu ? 'block' : 'hidden'">
+      <div
+        class="md:hidden"
+        :class="showMenu ? 'block' : 'hidden'"
+      >
         <div class="px-2 pt-2 pb-3 sm:px-3">
           <router-link
             v-for="(link, i) in links"
             :key="i"
+            v-slot="{ navigate, href, isExactActive }"
             :to="link.to"
             custom
-            v-slot="{ navigate, href, isExactActive }"
           >
             <a
               :href="href"
-              @click="navigate().then(() => (showMenu = false))"
               class="block px-3 py-2 text-base font-medium rounded-md"
               :class="[
                 isExactActive
@@ -181,25 +181,28 @@
                   : 'text-gray-300 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700',
                 i > 0 && 'mt-1',
               ]"
-              >{{ link.text }}</a
-            >
+              @click="navigate().then(() => (showMenu = false))"
+            >{{ link.text }}</a>
           </router-link>
         </div>
-        <div class="pt-4 pb-3 border-t border-gray-700">
+        <div
+          v-if="$store.state.user"
+          class="pt-4 pb-3 border-t border-gray-700"
+        >
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
               <img
                 class="w-10 h-10 rounded-full"
-                src="/img/person1.jpeg"
+                :src="avatarImg"
                 alt=""
-              />
+              >
             </div>
             <div class="ml-3">
               <div class="text-base font-medium leading-none text-white">
-                Tom Cook
+                Logged In user:
               </div>
               <div class="mt-1 text-sm font-medium leading-none text-gray-400">
-                tom@example.com
+                {{ $store.state.user.email }}
               </div>
             </div>
           </div>
@@ -207,24 +210,26 @@
             <a
               href="#"
               class="block px-3 py-2 text-base font-medium text-gray-400 rounded-md  hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
-              >Your Profile</a
-            >
+            >Your Profile</a>
             <a
               href="#"
               class="block px-3 py-2 mt-1 text-base font-medium text-gray-400 rounded-md  hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
-              >Settings</a
-            >
-            <a
-              href="#"
+            >Settings</a>
+            <router-link
+              to="logout"
               class="block px-3 py-2 mt-1 text-base font-medium text-gray-400 rounded-md  hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-700"
-              >Sign out</a
             >
+              Sign out
+            </router-link>
           </div>
         </div>
       </div>
     </nav>
 
-    <header class="bg-white shadow" v-if="$route.meta.title">
+    <header
+      v-if="$route.meta.title"
+      class="bg-white shadow"
+    >
       <div class="max-w-screen-xl px-4 py-6 mx-auto sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold leading-tight text-gray-900">
           {{ $route.meta.title }}
@@ -239,16 +244,27 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import {onBeforeMount} from 'vue';
+import {useStore} from 'vuex';
+
+import {defineComponent} from 'vue';
 
 export default defineComponent({
+  setup() {
+    const store = useStore();
+    onBeforeMount(() => {
+      store.dispatch('fetchUser');
+    });
+  },
   data: () => ({
     showMenu: false,
     showProfileMenu: false,
+    avatarImg: '/img/blank.jpg',
     links: [
-      { text: 'Home', to: '/' },
-      { text: 'About', to: '/about' },
+      {text: 'Home', to: '/'},
+      {text: 'About', to: '/about'},
+      {text: 'Dashboard', to: '/dashboard'},
     ],
   }),
-})
+});
 </script>
