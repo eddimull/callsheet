@@ -9,6 +9,6 @@ import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 import 'primevue/resources/themes/tailwind-light/theme.css';
 
-
 createApp(App).use(store).use(router).use(PrimeVue).use(primePlugin).mount('#app');
+
 

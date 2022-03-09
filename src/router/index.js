@@ -1,12 +1,14 @@
 import {routes} from './routes.js';
 import {createRouter, createWebHistory} from 'vue-router';
 import {auth} from '../firebase';
-
+import store from '../store';
+import {db} from '../firebase';
 
 const router = createRouter({
   history: createWebHistory(),
   routes: import.meta.hot ? [] : routes,
 });
+store.dispatch('setDatabase', db);
 
 if (import.meta.hot) {
   let removeRoutes = [];

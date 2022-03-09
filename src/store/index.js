@@ -1,6 +1,8 @@
 import {createStore} from 'vuex';
 import router from '../router';
 import {auth} from '../firebase';
+import players from './modules/players';
+import concerts from './modules/concerts';
 import {
 
   createUserWithEmailAndPassword,
@@ -12,6 +14,15 @@ export default createStore({
   state: {
     user: null,
     intendedRoute: '/',
+    database: null,
+  },
+  getters: {
+    user(state) {
+      return state.user;
+    },
+    db(state) {
+      return state.database;
+    },
   },
   mutations: {
 
@@ -26,9 +37,19 @@ export default createStore({
     SET_ROUTE(state, route) {
       state.intendedRoute = route;
     },
-
+    SET_DB(state, database) {
+      state.database = database;
+    },
+  },
+  modules: {
+    players,
+    concerts,
   },
   actions: {
+    setDatabase({commit}, database) {
+      console.log('setting db');
+      commit('SET_DB', database);
+    },
     setRoute({commit}, route) {
       commit('SET_ROUTE', route);
     },
@@ -54,7 +75,7 @@ export default createStore({
 
       commit('SET_USER', auth.currentUser);
 
-      router.push('/dashboard');
+      router.push('/');
     },
 
     async register({commit}, details) {
